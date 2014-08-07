@@ -34,8 +34,14 @@ class   DecryptionFilter
                   if decryption_key.nil?
                     value
                   else
-                    decoded_string = Base64.strict_decode64(value)
-                    decryption_key.private_decrypt(decoded_string)
+                    decoded_string    = Base64.strict_decode64(value)
+                    unencrypted_value = decryption_key.private_decrypt(decoded_string)
+
+                    begin
+                      unmarshalled_value = Marshal.load(unencrypted_value)
+                    rescue TypeError
+                      unencrypted_value
+                    end
                   end
                 else
                   warn 'WARNING: It appears that you would like to keep your ' \

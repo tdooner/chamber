@@ -36,6 +36,14 @@ describe  EncryptionFilter do
     expect(filtered_settings._secure_my_secure_setting).to match EncryptionFilter::BASE64_STRING_PATTERN
   end
 
+  it 'will attempt to encrypt values if they are numbers' do
+    filtered_settings = EncryptionFilter.execute( data: {
+                                                    _secure_my_secure_setting: 12345 },
+                                                  encryption_key: './spec/spec_key.pub' )
+
+    expect(filtered_settings._secure_my_secure_setting).to match EncryptionFilter::BASE64_STRING_PATTERN
+  end
+
   it 'will not attempt to encrypt values if it guesses that they are already encrpyted' do
     filtered_settings = EncryptionFilter.execute( data: {
                                                     _secure_my_secure_setting: 'fNI5wlBniNhEU4396pmhWwx+A09bRAMJOUASuP7PzprewBX8CXYqL+v/uXOJpIRCLDjwe8quuC+j9iLcPU7HBRMr054gGxeqZexbLevXcPk7SrMis3qeEKmnAuarQGXe7ZAntidMY9Lx4pqSkhYXwQnI48d2Dh44qfaS9w2OrehSkpdFRnuxQeOpCKO/bleB0J88WGkytCohyHCRIpbaEjEC3UD52pnqMeu/ClNm+PBgE6Ci94pu5UUnZuIE/y+P4A3wgD6G/u8hgvAW51JwVryg/im1rayGAwWYNgupQ/5LDmjffwx7Q3fyMH2uF3CDIKRIC6U+mnM5SRMO4Dzysw==' },
